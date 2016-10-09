@@ -13,23 +13,24 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ListView.OnItemClickListener{
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private SensorManager mSensorManager = null;
-    private List<Sensor> mSensors = null;
+    private SensorManager mSensorManager;
+    private List<Sensor> mSensors;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ListView listView = (ListView) findViewById(R.id.list_sensors);
+        ListView listView = (ListView) findViewById(R.id.listview_sensors);
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mSensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
-        listView.setAdapter(new ArrayAdapter<Sensor>(this,R.layout.listview_item,mSensors));
+        listView.setAdapter(new SensorAdapter(this, R.layout.listview_item, mSensors));
         listView.setOnItemClickListener(this);
     }
 
@@ -40,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements ListView.OnItemCl
         sensorIntent.putExtra("sensorType", sensor.getType());
         startActivity(sensorIntent);
     }
+
+
 }
 
 

@@ -10,7 +10,8 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ch.ethz.inf.vs.a1.fabischn.sensors.MainActivity">
 
-    <ListView android:id="@+id/list_sensors"
+    <ListView android:id="@+id/listview_sensors"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></ListView>
+        android:layout_height="wrap_content">
+    </ListView>
 </RelativeLayout>

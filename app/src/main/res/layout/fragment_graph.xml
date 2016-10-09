@@ -3,9 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="ch.ethz.inf.vs.a1.fabischn.sensors.GraphFragment">
-    <com.jjoe64.graphview.GraphView
+    <com.jjoe64.graphview.GraphView android:id="@+id/graphview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/graphview"/>
-
+        />
+    <com.jjoe64.graphview.GraphView android:id="@+id/graphview2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 </FrameLayout>

@@ -44,12 +44,12 @@ public class SensorTypesImpl implements SensorTypes {
             case Sensor.TYPE_ROTATION_VECTOR:
             case Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR:
             case Sensor.TYPE_GAME_ROTATION_VECTOR:
-                return 3;
             case Sensor.TYPE_GYROSCOPE_UNCALIBRATED:
             case Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED:
-                return 6;
+            case Sensor.TYPE_ORIENTATION: // Legacy, e.g. Galaxy S7 Edge... :D
+                return 3;
             case Sensor.TYPE_POSE_6DOF:
-                return 15;
+//                return 15; // ? Only reference found mentioned values[0-14]
             default:
                 return 0;
         }
@@ -86,6 +86,8 @@ public class SensorTypesImpl implements SensorTypes {
                 return "Steps";
             case Sensor.TYPE_HEART_RATE:
                 return "bpm";
+            case Sensor.TYPE_ORIENTATION: // Legacy, e.g. Galaxy S7 Edge... :D
+                return "°";
             case Sensor.TYPE_STEP_DETECTOR:
             case Sensor.TYPE_SIGNIFICANT_MOTION:
             case Sensor.TYPE_ROTATION_VECTOR:
@@ -95,6 +97,7 @@ public class SensorTypesImpl implements SensorTypes {
             case Sensor.TYPE_HEART_BEAT:
             case Sensor.TYPE_STATIONARY_DETECT:
             case Sensor.TYPE_MOTION_DETECT:
+
             default:
                 return "no unit";
 
