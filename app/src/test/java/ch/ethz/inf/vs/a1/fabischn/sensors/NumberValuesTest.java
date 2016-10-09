@@ -21,51 +21,51 @@ public class NumberValuesTest {
 
     @Test
     public void accelerometerTest() throws Exception {
-        assertEquals(mSensorTypes.getNumberValues(Sensor.TYPE_ACCELEROMETER), 3);
+        assertEquals(3, mSensorTypes.getNumberValues(Sensor.TYPE_ACCELEROMETER));
     }
 
     @Test
     public void ambientTemperatureTest() throws Exception {
-        assertEquals(mSensorTypes.getNumberValues(Sensor.TYPE_AMBIENT_TEMPERATURE), 1);
+        assertEquals(1, mSensorTypes.getNumberValues(Sensor.TYPE_AMBIENT_TEMPERATURE));
     }
 
     @Test
     public void gravityTest() throws Exception {
-        assertEquals(mSensorTypes.getNumberValues(Sensor.TYPE_GRAVITY), 3);
+        assertEquals(3, mSensorTypes.getNumberValues(Sensor.TYPE_GRAVITY));
     }
 
     @Test
     public void gyroscopeTest() throws Exception {
-        assertEquals(mSensorTypes.getNumberValues(Sensor.TYPE_GYROSCOPE), 3);
+        assertEquals(3, mSensorTypes.getNumberValues(Sensor.TYPE_GYROSCOPE));
     }
 
     @Test
     public void lightTest() throws Exception {
-        assertEquals(mSensorTypes.getNumberValues(Sensor.TYPE_LIGHT), 1);
+        assertEquals(1, mSensorTypes.getNumberValues(Sensor.TYPE_LIGHT));
     }
 
     @Test
     public void linearAccelerationTest() throws Exception {
-        assertEquals(mSensorTypes.getNumberValues(Sensor.TYPE_LINEAR_ACCELERATION), 3);
+        assertEquals(3, mSensorTypes.getNumberValues(Sensor.TYPE_LINEAR_ACCELERATION));
     }
 
     @Test
     public void magneticFieldTest() throws Exception {
-        assertEquals(mSensorTypes.getNumberValues(Sensor.TYPE_MAGNETIC_FIELD), 3);
+        assertEquals(3, mSensorTypes.getNumberValues(Sensor.TYPE_MAGNETIC_FIELD));
     }
 
     @Test
     public void PressureTest() throws Exception {
-        assertEquals(mSensorTypes.getNumberValues(Sensor.TYPE_PRESSURE), 1);
+        assertEquals(1, mSensorTypes.getNumberValues(Sensor.TYPE_PRESSURE));
     }
 
     @Test
     public void RelativeHumidityTest() throws Exception {
-        assertEquals(mSensorTypes.getNumberValues(Sensor.TYPE_RELATIVE_HUMIDITY), 1);
+        assertEquals(1, mSensorTypes.getNumberValues(Sensor.TYPE_RELATIVE_HUMIDITY));
     }
 
     @Test
     public void RotationVectorTest() throws Exception {
-        assertEquals(mSensorTypes.getNumberValues(Sensor.TYPE_ROTATION_VECTOR), 3);
+        assertEquals(3, mSensorTypes.getNumberValues(Sensor.TYPE_ROTATION_VECTOR));
     }
 }

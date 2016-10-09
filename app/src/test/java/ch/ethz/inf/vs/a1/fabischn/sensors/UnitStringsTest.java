@@ -5,8 +5,8 @@ import android.hardware.Sensor;
 import org.junit.Before;
 import org.junit.Test;
 
-import ch.ethz.inf.vs.a1.nethz.sensors.SensorTypes;
-import ch.ethz.inf.vs.a1.nethz.sensors.SensorTypesImpl;
+import ch.ethz.inf.vs.a1.fabischn.sensors.SensorTypes;
+import ch.ethz.inf.vs.a1.fabischn.sensors.SensorTypesImpl;
 
 import static org.junit.Assert.assertEquals;
 
@@ -24,51 +24,51 @@ public class UnitStringsTest {
 
     @Test
     public void accelerometerTest() throws Exception {
-        assertEquals(mSensorTypes.getUnitString(Sensor.TYPE_ACCELEROMETER), "m/s^2");
+        assertEquals("m/s^2", mSensorTypes.getUnitString(Sensor.TYPE_ACCELEROMETER));
     }
 
     @Test
     public void ambientTemperatureTest() throws Exception {
-        assertEquals(mSensorTypes.getUnitString(Sensor.TYPE_AMBIENT_TEMPERATURE), "°C");
+        assertEquals("°C", mSensorTypes.getUnitString(Sensor.TYPE_AMBIENT_TEMPERATURE));
     }
 
     @Test
     public void gravityTest() throws Exception {
-        assertEquals(mSensorTypes.getUnitString(Sensor.TYPE_GRAVITY), "m/s^2");
+        assertEquals("m/s^2", mSensorTypes.getUnitString(Sensor.TYPE_GRAVITY));
     }
 
     @Test
     public void gyroscopeTest() throws Exception {
-        assertEquals(mSensorTypes.getUnitString(Sensor.TYPE_GYROSCOPE), "rad/s");
+        assertEquals("rad/s", mSensorTypes.getUnitString(Sensor.TYPE_GYROSCOPE));
     }
 
     @Test
     public void lightTest() throws Exception {
-        assertEquals(mSensorTypes.getUnitString(Sensor.TYPE_LIGHT), "lx");
+        assertEquals("lx", mSensorTypes.getUnitString(Sensor.TYPE_LIGHT));
     }
 
     @Test
     public void linearAccelerationTest() throws Exception {
-        assertEquals(mSensorTypes.getUnitString(Sensor.TYPE_LINEAR_ACCELERATION), "m/s^2");
+        assertEquals("m/s^2", mSensorTypes.getUnitString(Sensor.TYPE_LINEAR_ACCELERATION));
     }
 
     @Test
     public void magneticFieldTest() throws Exception {
-        assertEquals(mSensorTypes.getUnitString(Sensor.TYPE_MAGNETIC_FIELD), "microT");
+        assertEquals("microT", mSensorTypes.getUnitString(Sensor.TYPE_MAGNETIC_FIELD));
     }
 
     @Test
     public void PressureTest() throws Exception {
-        assertEquals(mSensorTypes.getUnitString(Sensor.TYPE_PRESSURE), "hPa");
+        assertEquals("hPa", mSensorTypes.getUnitString(Sensor.TYPE_PRESSURE));
     }
 
     @Test
     public void RelativeHumidityTest() throws Exception {
-        assertEquals(mSensorTypes.getUnitString(Sensor.TYPE_RELATIVE_HUMIDITY), "%");
+        assertEquals("%", mSensorTypes.getUnitString(Sensor.TYPE_RELATIVE_HUMIDITY));
     }
 
     @Test
     public void RotationVectorTest() throws Exception {
-        assertEquals(mSensorTypes.getUnitString(Sensor.TYPE_ROTATION_VECTOR), "no unit");
+        assertEquals("no unit", mSensorTypes.getUnitString(Sensor.TYPE_ROTATION_VECTOR));
     }
 }

@@ -15,10 +15,10 @@ import android.hardware.Sensor;
  * https://source.android.com/devices/sensors/sensor-types.html
  */
 
-public class AvailableSensors implements SensorTypes {
+public class SensorTypesImpl implements SensorTypes {
 
     private final static String SQUARE = "&amp;#xB2;";
-    private final static String DEGREE = "&amp;#xB0;";
+    private final static String DEGREE = "°";
     private final static String MICRO = "&amp;#xB5;";
 
     @Override
@@ -41,11 +41,10 @@ public class AvailableSensors implements SensorTypes {
             case Sensor.TYPE_GRAVITY:
             case Sensor.TYPE_GYROSCOPE:
             case Sensor.TYPE_MAGNETIC_FIELD:
-                return 3;
             case Sensor.TYPE_ROTATION_VECTOR:
             case Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR:
             case Sensor.TYPE_GAME_ROTATION_VECTOR:
-                return 5;
+                return 3;
             case Sensor.TYPE_GYROSCOPE_UNCALIBRATED:
             case Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED:
                 return 6;
@@ -63,9 +62,11 @@ public class AvailableSensors implements SensorTypes {
             case Sensor.TYPE_ACCELEROMETER:
             case Sensor.TYPE_GRAVITY:
             case Sensor.TYPE_LINEAR_ACCELERATION:
-                return "m/s"+SQUARE;
+//                return "m/s"+SQUARE;
+                return "m/s^2";
             case Sensor.TYPE_AMBIENT_TEMPERATURE:
-                return DEGREE+"C";
+//                return DEGREE + "C";
+                return "°C";
             case Sensor.TYPE_GYROSCOPE:
             case Sensor.TYPE_GYROSCOPE_UNCALIBRATED:
                 return "rad/s";
@@ -73,21 +74,21 @@ public class AvailableSensors implements SensorTypes {
                 return "lx";
             case Sensor.TYPE_MAGNETIC_FIELD:
             case Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED:
-                return MICRO+"T";
+//                return MICRO+"T";
+                return "microT";
             case Sensor.TYPE_PRESSURE:
                 return "hPa";
             case Sensor.TYPE_PROXIMITY:
                 return "cm";
             case Sensor.TYPE_RELATIVE_HUMIDITY:
                 return "%";
-            case Sensor.TYPE_ROTATION_VECTOR:
-                return DEGREE;
             case Sensor.TYPE_STEP_COUNTER:
                 return "Steps";
             case Sensor.TYPE_HEART_RATE:
                 return "bpm";
             case Sensor.TYPE_STEP_DETECTOR:
             case Sensor.TYPE_SIGNIFICANT_MOTION:
+            case Sensor.TYPE_ROTATION_VECTOR:
             case Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR:
             case Sensor.TYPE_GAME_ROTATION_VECTOR:
             case Sensor.TYPE_POSE_6DOF:
@@ -95,7 +96,7 @@ public class AvailableSensors implements SensorTypes {
             case Sensor.TYPE_STATIONARY_DETECT:
             case Sensor.TYPE_MOTION_DETECT:
             default:
-                return "unknown units";
+                return "no unit";
 
 
         }
