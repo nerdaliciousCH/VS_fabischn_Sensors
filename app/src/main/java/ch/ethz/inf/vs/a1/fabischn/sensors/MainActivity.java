@@ -7,6 +7,7 @@ import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,6 +16,8 @@ import android.widget.ListView;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ListView.OnItemClickListener{
+
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     private SensorManager mSensorManager = null;
     private List<Sensor> mSensors = null;
@@ -34,8 +37,7 @@ public class MainActivity extends AppCompatActivity implements ListView.OnItemCl
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent sensorIntent = new Intent(this, SensorActivity.class);
         Sensor sensor = (Sensor) parent.getAdapter().getItem(position);
-        String sensorName = sensor.getName();
-        sensorIntent.putExtra(Intent.EXTRA_TEXT, sensorName);
+        sensorIntent.putExtra("sensorType", sensor.getType());
         startActivity(sensorIntent);
     }
 }
