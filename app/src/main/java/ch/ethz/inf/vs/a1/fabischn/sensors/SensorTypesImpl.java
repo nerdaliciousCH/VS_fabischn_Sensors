@@ -17,9 +17,9 @@ import android.hardware.Sensor;
 
 public class SensorTypesImpl implements SensorTypes {
 
-    private final static String SQUARE = "&amp;#xB2;";
-    private final static String DEGREE = "°";
-    private final static String MICRO = "&amp;#xB5;";
+    private final static String SQUARE = "\u00B2";
+    private final static String DEGREE = "\u00B0";
+    private final static String MICRO = "\u00B5";
 
     @Override
     public int getNumberValues(int sensorType) {
@@ -62,8 +62,8 @@ public class SensorTypesImpl implements SensorTypes {
             case Sensor.TYPE_ACCELEROMETER:
             case Sensor.TYPE_GRAVITY:
             case Sensor.TYPE_LINEAR_ACCELERATION:
-//                return "m/s"+SQUARE;
-                return "m/s^2";
+                return "m/s"+SQUARE;
+//                return "m/s^2";
             case Sensor.TYPE_AMBIENT_TEMPERATURE:
 //                return DEGREE + "C";
                 return "°C";
@@ -74,8 +74,8 @@ public class SensorTypesImpl implements SensorTypes {
                 return "lx";
             case Sensor.TYPE_MAGNETIC_FIELD:
             case Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED:
-//                return MICRO+"T";
-                return "microT";
+                return MICRO+"T";
+//                return "microT";
             case Sensor.TYPE_PRESSURE:
                 return "hPa";
             case Sensor.TYPE_PROXIMITY:

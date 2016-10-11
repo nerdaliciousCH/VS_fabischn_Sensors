@@ -8,8 +8,6 @@ import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.Viewport;
-import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
-import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
@@ -60,18 +58,20 @@ public class GraphWrapper implements GraphContainer {
             mGraph.addSeries(mSeries[i]);
         }
         Viewport vp = mGraph.getViewport();
-        vp.setXAxisBoundsManual(false);
+        vp.setXAxisBoundsManual(true);
         vp.setMinX(0);
+        vp.setMaxX(20);
+
         GridLabelRenderer glr = mGraph.getGridLabelRenderer();
         glr.setGridStyle(GridLabelRenderer.GridStyle.HORIZONTAL);
-        glr.setHorizontalAxisTitle("Time");
-        glr.setNumHorizontalLabels(2);
+        glr.setHorizontalAxisTitle("Time in seconds");
+        glr.setNumHorizontalLabels(4);
         glr.setLabelFormatter(new DefaultLabelFormatter() {
             @Override
             public String formatLabel(double value, boolean isValueX) {
                 if (isValueX) {
                     // show normal x values
-                    return super.formatLabel(value, true) + " sec";
+                    return super.formatLabel(value, true);
                 } else {
                     // show unit for y values
                     return super.formatLabel(value, false) + " " + mUnit;
@@ -79,10 +79,17 @@ public class GraphWrapper implements GraphContainer {
             }
         });
 
-        //mGraph.getGridLabelRenderer().setLabelVerticalWidth(100);
-        mGraph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(mActivity));
+        glr.setLabelVerticalWidth(300); // Labels need enough space
+        glr.reloadStyles();
     }
 
+    public void saveData(){
+        // TODO save the series
+    }
+
+    public void restoreData(){
+        // TODO restore the series
+    }
 
     @Override
     public void addValues(double xIndex, float[] values) {

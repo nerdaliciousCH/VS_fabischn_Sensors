@@ -59,7 +59,6 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
             TextView textViewType = (TextView) mLinearLayout.findViewById(R.id.text_type);
             TextView textViewMinDelay = (TextView) mLinearLayout.findViewById(R.id.text_min_delay);
             TextView textViewMaxDelay = (TextView) mLinearLayout.findViewById(R.id.text_max_delay);
-            TextView textViewMaxRange = (TextView) mLinearLayout.findViewById(R.id.text_max_range);
             TextView textViewAccuracy = (TextView) mLinearLayout.findViewById(R.id.text_accuracy);
             textViewSensorName.setText("Name: " + mSensor.getName());
             textViewType.setText("Type: " + mSensor.getStringType());
@@ -84,9 +83,9 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
         if(mSensor != null){
             mIsFirstEvent = true;
             mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
-            // TODO do I need this?
-            mTimeStart = SystemClock.elapsedRealtimeNanos();
         }
+        // TODO reset mgraph series data
+
     }
 
     @Override
@@ -98,10 +97,10 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
     protected void onPause() {
         super.onPause();
         mSensorManager.unregisterListener(this);
+        // TODO save mgraph series data
     }
 
     public GraphContainer getGraphContainer(){
-
         return mGraphWrapper;
     }
 
