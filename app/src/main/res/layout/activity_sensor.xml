@@ -26,4 +26,10 @@
     <TextView android:id="@+id/text_max_range"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+    <TextView android:id="@+id/text_accuracy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <com.jjoe64.graphview.GraphView android:id="@+id/graphview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>

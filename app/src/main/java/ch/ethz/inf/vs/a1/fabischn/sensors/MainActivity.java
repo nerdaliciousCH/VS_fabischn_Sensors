@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements ListView.OnItemCl
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent sensorIntent = new Intent(this, SensorActivity.class);
         Sensor sensor = (Sensor) parent.getAdapter().getItem(position);
-        sensorIntent.putExtra("sensorType", sensor.getType());
+        sensorIntent.putExtra("sensor_index", sensor.getType());
         startActivity(sensorIntent);
     }
 

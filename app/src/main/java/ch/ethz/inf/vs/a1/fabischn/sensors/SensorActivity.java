@@ -6,86 +6,75 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TimeUtils;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SensorActivity extends AppCompatActivity implements SensorEventListener {
+public class SensorActivity extends AppCompatActivity implements SensorEventListener{
 
     private static final String TAG = SensorActivity.class.getSimpleName();
 
     private SensorManager mSensorManager;
     private Sensor mSensor;
     private LinearLayout mLinearLayout;
-    private TextView mTextViewSensorName;
-    private TextView mTextViewType;
-    private TextView mTextViewMinDelay;
-    private TextView mTextViewMaxDelay;
-    private TextView mTextViewMaxRange;
-    private GraphFragment mGraphFragment;
+    private GraphWrapper mGraphWrapper;
     private SensorTypesImpl mSensorTypesImpl;
-    private int mCurrAccuracy = 0;
-    private int mValues = 0;
+    private int mAccuracy = 0;
+    private int mValues = 0; // How many values does the sensor return? e.g. 3 for 3D vectors
     private String mUnit = "";
-    private int mCurrID= 0;
-    private List<Integer> mTextViewIDs; // left is hierarchy, right is id
+    private long mTimeStart;
+    private boolean mIsFirstEvent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor);
         mLinearLayout = (LinearLayout) findViewById(R.id.activity_sensor);
-        mTextViewSensorName = (TextView) mLinearLayout.findViewById(R.id.text_sensor_name);
+        TextView textViewSensorName = (TextView) mLinearLayout.findViewById(R.id.text_sensor_name);
         mSensorTypesImpl = new SensorTypesImpl();
-
         Intent intent = getIntent();
-        int sensorType = intent.getIntExtra("sensorType", 0);
+        int sensorType = intent.getIntExtra("sensor_index", 0);
+
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         if (sensorType != 0){
             mSensor = mSensorManager.getDefaultSensor(sensorType);
         } else{
-            Log.d(TAG,"Sensor Type was 0!");
+            Log.w(TAG, "INSTRUMENTATIONTEST");
+            mGraphWrapper = new GraphWrapper(this, mLinearLayout, R.id.graphview);
+            mGraphWrapper.initGraph(3,"TEST");
         }
         if (mSensor != null){
-            mTextViewType = (TextView) mLinearLayout.findViewById(R.id.text_type);
-            mTextViewMinDelay = (TextView) mLinearLayout.findViewById(R.id.text_min_delay);
-            mTextViewMaxDelay = (TextView) mLinearLayout.findViewById(R.id.text_max_delay);
-            mTextViewMaxRange = (TextView) mLinearLayout.findViewById(R.id.text_max_range);
-            mTextViewSensorName.setText("Name: " + mSensor.getName());
-            mTextViewType.setText("Type: " + mSensor.getStringType());
-            mTextViewMinDelay.setText("Min Delay: " + Integer.toString(mSensor.getMinDelay()));
-            mTextViewMaxDelay.setText("Max Delay: " + Integer.toString(mSensor.getMaxDelay()));
-            mTextViewMaxRange.setText("Max Range: " + Float.toString(mSensor.getMaximumRange()));
+            TextView textViewType = (TextView) mLinearLayout.findViewById(R.id.text_type);
+            TextView textViewMinDelay = (TextView) mLinearLayout.findViewById(R.id.text_min_delay);
+            TextView textViewMaxDelay = (TextView) mLinearLayout.findViewById(R.id.text_max_delay);
+            TextView textViewMaxRange = (TextView) mLinearLayout.findViewById(R.id.text_max_range);
+            TextView textViewAccuracy = (TextView) mLinearLayout.findViewById(R.id.text_accuracy);
+            textViewSensorName.setText("Name: " + mSensor.getName());
+            textViewType.setText("Type: " + mSensor.getStringType());
+            textViewMinDelay.setText("Min Delay: " + Integer.toString(mSensor.getMinDelay()));
+            textViewMaxDelay.setText("Max Delay: " + Integer.toString(mSensor.getMaxDelay()));
+            textViewAccuracy.setText("Accuracy: " + mAccuracy);
 
             mValues = mSensorTypesImpl.getNumberValues(sensorType);
             mUnit = mSensorTypesImpl.getUnitString(sensorType);
-
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-
-            mTextViewIDs = new ArrayList<>();
-
-            for(int i = 0; i < mValues; i++){
-                TextView textView = new TextView(this);
-                int id = findUnusedId();
-                textView.setId(id);
-                mTextViewIDs.add(i, id);
-                textView.setText("0");
-                mLinearLayout.addView(textView, layoutParams);
-            }
-
-            // TODO call with mValues, min, max etc.
-            mGraphFragment = new GraphFragment();
-            getFragmentManager().beginTransaction().add(R.id.activity_sensor, mGraphFragment).commit();
+            mGraphWrapper = new GraphWrapper(this, mLinearLayout, R.id.graphview);
+            mGraphWrapper.initGraph(mValues,mUnit);
 
         } else {
-            mTextViewSensorName.setText("no sensor for this type available");
+            Log.e(TAG, "Sensor was null, no sensor for this type available");
+            textViewSensorName.setText("no sensor for this type available");
         }
     }
 
@@ -93,7 +82,10 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
     protected void onResume() {
         super.onResume();
         if(mSensor != null){
+            mIsFirstEvent = true;
             mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+            // TODO do I need this?
+            mTimeStart = SystemClock.elapsedRealtimeNanos();
         }
     }
 
@@ -109,29 +101,28 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
     }
 
     public GraphContainer getGraphContainer(){
-        return null;
+
+        return mGraphWrapper;
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        // mGraphFragment.addValues(event.timestamp, );
-        for (int i = 0; i < mValues; i++){
-            TextView textView = (TextView) mLinearLayout.findViewById(mTextViewIDs.get(i));
-            textView.setText(mUnit + ": " + Float.toString(event.values[i]));
+        double x = 0.0;
+        if(mIsFirstEvent) {
+            mTimeStart = event.timestamp;
+            mIsFirstEvent = false;
         }
+        else {
+            x = (double)(event.timestamp - mTimeStart) / 1e9;
+        }
+        mGraphWrapper.addValues(x, event.values);
+        Log.w(TAG, "wrote: " + Double.toString(x) + ", " + Double.toString(event.values[0]));
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        mCurrAccuracy = accuracy;
+        mAccuracy = accuracy;
+        TextView textViewAccuracy = (TextView) findViewById(R.id.text_accuracy);
+        textViewAccuracy.setText("Accuracy: " + mAccuracy);
     }
-
-    // TODO javadoc?
-    // Utility function to produce IDs for the dynamically added View objects
-    // As in http://stackoverflow.com/questions/1714297/android-view-setidint-id-programmatically-how-to-avoid-id-conflicts
-    public int findUnusedId() {
-        while( mLinearLayout.findViewById(++mCurrID) != null );
-        return mCurrID;
-    }
-
 }
