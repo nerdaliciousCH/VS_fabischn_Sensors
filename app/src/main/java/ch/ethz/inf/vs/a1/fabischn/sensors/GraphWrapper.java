@@ -26,6 +26,7 @@ public class GraphWrapper implements GraphContainer {
     private int mSensorValues = 0;
     private String mUnit;
     private int mDataCount = 0;
+    private long mDelay = 0;
     private int[] mColors = {Color.BLUE,
             Color.GREEN,
             Color.RED,
@@ -37,9 +38,10 @@ public class GraphWrapper implements GraphContainer {
             };
     private final int mColorCount = 8;
 
-    public GraphWrapper(Activity activity, View root, int graphViewID){
+    public GraphWrapper(Activity activity, View root, int graphViewID, long delay){
         mActivity = activity;
         mGraph = (GraphView) root.findViewById(graphViewID);
+        mDelay = delay;
     }
 
     public void initGraph(int sensorValues, String unitString) {
@@ -58,9 +60,10 @@ public class GraphWrapper implements GraphContainer {
             mGraph.addSeries(mSeries[i]);
         }
         Viewport vp = mGraph.getViewport();
-        vp.setXAxisBoundsManual(true);
-        vp.setMinX(0);
-        vp.setMaxX(20);
+        vp.setXAxisBoundsManual(true); // if true, the labels don't update
+        vp.setMinX(0); // use delay to calculate correct delta x
+        vp.setMaxX(mDelay);
+
 
         GridLabelRenderer glr = mGraph.getGridLabelRenderer();
         glr.setGridStyle(GridLabelRenderer.GridStyle.HORIZONTAL);
@@ -94,7 +97,7 @@ public class GraphWrapper implements GraphContainer {
     @Override
     public void addValues(double xIndex, float[] values) {
         for (int i = 0; i < mSensorValues; i++){
-            mSeries[i].appendData(new DataPoint(xIndex, values[i]), true, MAX_ELEMENTS);
+            mSeries[i].appendData(new DataPoint(xIndex, values[i]), true, MAX_ELEMENTS+2);
         }
         mGraph.onDataChanged(true,true);
         mDataCount++;

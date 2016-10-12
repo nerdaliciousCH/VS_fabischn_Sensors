@@ -29,6 +29,7 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
     private SensorManager mSensorManager;
     private Sensor mSensor;
     private LinearLayout mLinearLayout;
+    private List<Integer> mTextViewIDs;
     private GraphWrapper mGraphWrapper;
     private SensorTypesImpl mSensorTypesImpl;
     private int mAccuracy = 0;
@@ -36,6 +37,7 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
     private String mUnit = "";
     private long mTimeStart;
     private boolean mIsFirstEvent;
+    private int mCurrID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,23 +54,31 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
             mSensor = mSensorManager.getDefaultSensor(sensorType);
         } else{
             Log.w(TAG, "INSTRUMENTATIONTEST");
-            mGraphWrapper = new GraphWrapper(this, mLinearLayout, R.id.graphview);
+            mGraphWrapper = new GraphWrapper(this, mLinearLayout, R.id.graphview, 0);
             mGraphWrapper.initGraph(3,"TEST");
         }
         if (mSensor != null){
-            TextView textViewType = (TextView) mLinearLayout.findViewById(R.id.text_type);
-            TextView textViewMinDelay = (TextView) mLinearLayout.findViewById(R.id.text_min_delay);
-            TextView textViewMaxDelay = (TextView) mLinearLayout.findViewById(R.id.text_max_delay);
-            TextView textViewAccuracy = (TextView) mLinearLayout.findViewById(R.id.text_accuracy);
             textViewSensorName.setText("Name: " + mSensor.getName());
+            TextView textViewType = (TextView) mLinearLayout.findViewById(R.id.text_type);
             textViewType.setText("Type: " + mSensor.getStringType());
-            textViewMinDelay.setText("Min Delay: " + Integer.toString(mSensor.getMinDelay()));
-            textViewMaxDelay.setText("Max Delay: " + Integer.toString(mSensor.getMaxDelay()));
-            textViewAccuracy.setText("Accuracy: " + mAccuracy);
 
             mValues = mSensorTypesImpl.getNumberValues(sensorType);
             mUnit = mSensorTypesImpl.getUnitString(sensorType);
-            mGraphWrapper = new GraphWrapper(this, mLinearLayout, R.id.graphview);
+
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            mTextViewIDs = new ArrayList<>();
+            for(int i = 0; i < mValues; i++){
+                TextView textView = new TextView(this);
+                int id = findUnusedId();
+                textView.setId(id);
+                mTextViewIDs.add(i, id);
+                textView.setText("0");
+                mLinearLayout.addView(textView, layoutParams);
+            }
+
+            mGraphWrapper = new GraphWrapper(this, mLinearLayout, R.id.graphview, (long) (mSensor.getMinDelay()/1e3));
             mGraphWrapper.initGraph(mValues,mUnit);
 
         } else {
@@ -114,6 +124,12 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
         else {
             x = (double)(event.timestamp - mTimeStart) / 1e9;
         }
+
+                for (int i = 0; i < mValues; i++){
+            TextView textView = (TextView) mLinearLayout.findViewById(mTextViewIDs.get(i));
+            textView.setText(Float.toString(event.values[i]));
+            textView.setText(mUnit + ": " + Float.toString(event.values[i]));
+        }
         mGraphWrapper.addValues(x, event.values);
         Log.w(TAG, "wrote: " + Double.toString(x) + ", " + Double.toString(event.values[0]));
     }
@@ -121,7 +137,10 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         mAccuracy = accuracy;
-        TextView textViewAccuracy = (TextView) findViewById(R.id.text_accuracy);
-        textViewAccuracy.setText("Accuracy: " + mAccuracy);
     }
+    public int findUnusedId() {
+        while( mLinearLayout.findViewById(++mCurrID) != null );
+        return mCurrID;
+    }
+
 }
