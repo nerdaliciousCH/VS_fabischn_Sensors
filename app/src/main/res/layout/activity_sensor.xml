@@ -10,12 +10,29 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ch.ethz.inf.vs.a1.fabischn.sensors.SensorActivity">
-    <TextView android:id="@+id/text_sensor_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <TextView android:id="@+id/text_type"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView android:id="@+id/text_sensor_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView android:id="@+id/text_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linearlayout_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp"/>
+    </LinearLayout>
+
     <com.jjoe64.graphview.GraphView android:id="@+id/graphview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

@@ -29,6 +29,7 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
     private SensorManager mSensorManager;
     private Sensor mSensor;
     private LinearLayout mLinearLayout;
+    private LinearLayout mLinearLayoutGraph;
     private List<Integer> mTextViewIDs;
     private GraphWrapper mGraphWrapper;
     private SensorTypesImpl mSensorTypesImpl;
@@ -43,8 +44,9 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor);
-        mLinearLayout = (LinearLayout) findViewById(R.id.activity_sensor);
-        TextView textViewSensorName = (TextView) mLinearLayout.findViewById(R.id.text_sensor_name);
+        mLinearLayout = (LinearLayout) findViewById(R.id.linearlayout_data);
+        mLinearLayoutGraph = (LinearLayout) findViewById(R.id.activity_sensor);
+        TextView textViewSensorName = (TextView) findViewById(R.id.text_sensor_name);
         mSensorTypesImpl = new SensorTypesImpl();
         Intent intent = getIntent();
         int sensorType = intent.getIntExtra("sensor_index", 0);
@@ -54,16 +56,17 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
             mSensor = mSensorManager.getDefaultSensor(sensorType);
         } else{
             Log.w(TAG, "INSTRUMENTATIONTEST");
-            mGraphWrapper = new GraphWrapper(this, mLinearLayout, R.id.graphview, 0);
-            mGraphWrapper.initGraph(3,"TEST");
+            mGraphWrapper = new GraphWrapper(mLinearLayoutGraph, R.id.graphview, 0);
+            mGraphWrapper.initGraph(3,"TEST", false ,0, 0);
         }
         if (mSensor != null){
-            textViewSensorName.setText("Name: " + mSensor.getName());
-            TextView textViewType = (TextView) mLinearLayout.findViewById(R.id.text_type);
+            textViewSensorName.setText(mSensor.getName());
+            TextView textViewType = (TextView) findViewById(R.id.text_type);
             textViewType.setText("Type: " + mSensor.getStringType());
 
             mValues = mSensorTypesImpl.getNumberValues(sensorType);
             mUnit = mSensorTypesImpl.getUnitString(sensorType);
+
 
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
@@ -78,8 +81,8 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
                 mLinearLayout.addView(textView, layoutParams);
             }
 
-            mGraphWrapper = new GraphWrapper(this, mLinearLayout, R.id.graphview, (long) (mSensor.getMinDelay()/1e3));
-            mGraphWrapper.initGraph(mValues,mUnit);
+            mGraphWrapper = new GraphWrapper(mLinearLayoutGraph, R.id.graphview, (long) (mSensor.getMinDelay()/1e3));
+            mGraphWrapper.initGraph(mValues,mUnit,true, mSensorTypesImpl.getMinY(sensorType), mSensorTypesImpl.getMaxY(sensorType));
 
         } else {
             Log.e(TAG, "Sensor was null, no sensor for this type available");
@@ -92,10 +95,8 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
         super.onResume();
         if(mSensor != null){
             mIsFirstEvent = true;
-            mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+            mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_UI);
         }
-        // TODO reset mgraph series data
-
     }
 
     @Override
@@ -107,7 +108,6 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
     protected void onPause() {
         super.onPause();
         mSensorManager.unregisterListener(this);
-        // TODO save mgraph series data
     }
 
     public GraphContainer getGraphContainer(){
@@ -124,14 +124,13 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
         else {
             x = (double)(event.timestamp - mTimeStart) / 1e9;
         }
-
-                for (int i = 0; i < mValues; i++){
+        for (int i = 0; i < mValues; i++){
             TextView textView = (TextView) mLinearLayout.findViewById(mTextViewIDs.get(i));
             textView.setText(Float.toString(event.values[i]));
             textView.setText(mUnit + ": " + Float.toString(event.values[i]));
         }
         mGraphWrapper.addValues(x, event.values);
-        Log.w(TAG, "wrote: " + Double.toString(x) + ", " + Double.toString(event.values[0]));
+//        Log.w(TAG, "wrote: " + Double.toString(x) + ", " + Double.toString(event.values[0]));
     }
 
     @Override
@@ -139,7 +138,7 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
         mAccuracy = accuracy;
     }
     public int findUnusedId() {
-        while( mLinearLayout.findViewById(++mCurrID) != null );
+        while( findViewById(++mCurrID) != null );
         return mCurrID;
     }
 

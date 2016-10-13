@@ -16,7 +16,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".SensorActivity"
-            android:hardwareAccelerated="true"></activity>
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="true" />
     </application>
 
 </manifest>

@@ -62,11 +62,11 @@ public class SensorTypesImpl implements SensorTypes {
             case Sensor.TYPE_ACCELEROMETER:
             case Sensor.TYPE_GRAVITY:
             case Sensor.TYPE_LINEAR_ACCELERATION:
-                return "m/s"+SQUARE;
-//                return "m/s^2";
+//                return "m/s"+SQUARE;
+                return "m/s^2";
             case Sensor.TYPE_AMBIENT_TEMPERATURE:
-//                return DEGREE + "C";
-                return "°C";
+//                return "°C";
+                return DEGREE + "C";
             case Sensor.TYPE_GYROSCOPE:
             case Sensor.TYPE_GYROSCOPE_UNCALIBRATED:
                 return "rad/s";
@@ -74,8 +74,8 @@ public class SensorTypesImpl implements SensorTypes {
                 return "lx";
             case Sensor.TYPE_MAGNETIC_FIELD:
             case Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED:
-                return MICRO+"T";
-//                return "microT";
+//                return MICRO+"T";
+                return "microT";
             case Sensor.TYPE_PRESSURE:
                 return "hPa";
             case Sensor.TYPE_PROXIMITY:
@@ -103,5 +103,79 @@ public class SensorTypesImpl implements SensorTypes {
 
 
         }
+    }
+
+    // TODO insert correct values
+    public double getMaxY(int sensorType){
+        return 100.0;
+//        switch (sensorType){
+//            // common sensors
+//            case Sensor.TYPE_ACCELEROMETER:
+//            case Sensor.TYPE_LINEAR_ACCELERATION:
+//                return 20.0;
+//            case Sensor.TYPE_GRAVITY:
+//                return 20.0;
+//            case Sensor.TYPE_AMBIENT_TEMPERATURE:
+//                return 65.0;
+//            case Sensor.TYPE_GYROSCOPE:
+//            case Sensor.TYPE_GYROSCOPE_UNCALIBRATED:
+//            case Sensor.TYPE_LIGHT:
+//            case Sensor.TYPE_MAGNETIC_FIELD:
+//            case Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED:
+//            case Sensor.TYPE_PRESSURE:
+//            case Sensor.TYPE_PROXIMITY:
+//            case Sensor.TYPE_RELATIVE_HUMIDITY:
+//            case Sensor.TYPE_STEP_COUNTER:
+//            case Sensor.TYPE_HEART_RATE:
+//            case Sensor.TYPE_ORIENTATION: // Legacy, e.g. Galaxy S7 Edge... :D
+//            case Sensor.TYPE_STEP_DETECTOR:
+//            case Sensor.TYPE_SIGNIFICANT_MOTION:
+//            case Sensor.TYPE_ROTATION_VECTOR:
+//            case Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR:
+//            case Sensor.TYPE_GAME_ROTATION_VECTOR:
+//            case Sensor.TYPE_POSE_6DOF:
+//            case Sensor.TYPE_HEART_BEAT:
+//            case Sensor.TYPE_STATIONARY_DETECT:
+//            case Sensor.TYPE_MOTION_DETECT:
+//            default:
+//                return 1.0;
+//        }
+    }
+
+    // TODO insert correct values
+    public double getMinY(int sensorType){
+        return -10.0;
+//        switch (sensorType) {
+//            case Sensor.TYPE_ACCELEROMETER:
+//                return -20.0;
+//            case Sensor.TYPE_GRAVITY:
+//            case Sensor.TYPE_LINEAR_ACCELERATION:
+//                return -20.0;
+//            case Sensor.TYPE_AMBIENT_TEMPERATURE:
+//            case Sensor.TYPE_GYROSCOPE:
+//            case Sensor.TYPE_GYROSCOPE_UNCALIBRATED:
+//            case Sensor.TYPE_LIGHT:
+//            case Sensor.TYPE_MAGNETIC_FIELD:
+//            case Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED:
+//            case Sensor.TYPE_PRESSURE:
+//            case Sensor.TYPE_PROXIMITY:
+//            case Sensor.TYPE_RELATIVE_HUMIDITY:
+//            case Sensor.TYPE_STEP_COUNTER:
+//            case Sensor.TYPE_HEART_RATE:
+//            case Sensor.TYPE_ORIENTATION: // Legacy, e.g. Galaxy S7 Edge... :D
+//            case Sensor.TYPE_STEP_DETECTOR:
+//            case Sensor.TYPE_SIGNIFICANT_MOTION:
+//            case Sensor.TYPE_ROTATION_VECTOR:
+//            case Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR:
+//            case Sensor.TYPE_GAME_ROTATION_VECTOR:
+//            case Sensor.TYPE_POSE_6DOF:
+//            case Sensor.TYPE_HEART_BEAT:
+//            case Sensor.TYPE_STATIONARY_DETECT:
+//            case Sensor.TYPE_MOTION_DETECT:
+//
+//            default:
+//                return 0.0;
+//        }
+
     }
 }

@@ -19,7 +19,6 @@ import java.util.Iterator;
 
 public class GraphWrapper implements GraphContainer {
 
-    private Activity mActivity;
     private final int MAX_ELEMENTS = 100;
     private GraphView mGraph;
     private LineGraphSeries<DataPoint>[] mSeries;
@@ -38,13 +37,12 @@ public class GraphWrapper implements GraphContainer {
             };
     private final int mColorCount = 8;
 
-    public GraphWrapper(Activity activity, View root, int graphViewID, long delay){
-        mActivity = activity;
+    public GraphWrapper(View root, int graphViewID, long delay){
         mGraph = (GraphView) root.findViewById(graphViewID);
         mDelay = delay;
     }
 
-    public void initGraph(int sensorValues, String unitString) {
+    public void initGraph(int sensorValues, String unitString, boolean setYAxis, double minY, double maxY) {
         mSensorValues = sensorValues;
         mUnit = unitString;
         mSeries = new LineGraphSeries[sensorValues];
@@ -60,13 +58,24 @@ public class GraphWrapper implements GraphContainer {
             mGraph.addSeries(mSeries[i]);
         }
         Viewport vp = mGraph.getViewport();
-        vp.setXAxisBoundsManual(true); // if true, the labels don't update
-        vp.setMinX(0); // use delay to calculate correct delta x
-        vp.setMaxX(mDelay);
-
-
         GridLabelRenderer glr = mGraph.getGridLabelRenderer();
+
+        vp.setXAxisBoundsManual(true);
+        vp.setScalable(false);
+        vp.setScalableY(false);
+        vp.setScrollable(false);
+        vp.setScrollableY(false);
+
+          if (setYAxis){
+              vp.setYAxisBoundsManual(true);
+              vp.setMinY(minY);
+              vp.setMaxY(maxY);
+          }
+        vp.setMinX(0); // use delay to calculate correct delta x
+        // TODO Delay ... hmm
+        vp.setMaxX(5);
         glr.setGridStyle(GridLabelRenderer.GridStyle.HORIZONTAL);
+
         glr.setHorizontalAxisTitle("Time in seconds");
         glr.setNumHorizontalLabels(4);
         glr.setLabelFormatter(new DefaultLabelFormatter() {
@@ -74,30 +83,21 @@ public class GraphWrapper implements GraphContainer {
             public String formatLabel(double value, boolean isValueX) {
                 if (isValueX) {
                     // show normal x values
-                    return super.formatLabel(value, true);
+                    return super.formatLabel(value, true) + " s";
                 } else {
                     // show unit for y values
                     return super.formatLabel(value, false) + " " + mUnit;
                 }
             }
         });
-
         glr.setLabelVerticalWidth(300); // Labels need enough space
         glr.reloadStyles();
-    }
-
-    public void saveData(){
-        // TODO save the series
-    }
-
-    public void restoreData(){
-        // TODO restore the series
     }
 
     @Override
     public void addValues(double xIndex, float[] values) {
         for (int i = 0; i < mSensorValues; i++){
-            mSeries[i].appendData(new DataPoint(xIndex, values[i]), true, MAX_ELEMENTS+2);
+            mSeries[i].appendData(new DataPoint(xIndex, values[i]), true, MAX_ELEMENTS);
         }
         mGraph.onDataChanged(true,true);
         mDataCount++;
@@ -106,20 +106,21 @@ public class GraphWrapper implements GraphContainer {
     @Override
     public float[][] getValues() {
         float [][] values = new float[mDataCount][];
-        for(float[] f:values){
-            f = new float[mSensorValues];
+        for (int i = 0; i < mDataCount; i++){
+            values[i] = new float[mSensorValues];
         }
         DataPoint data;
-        int i = 0;
+        int i;
         int j = 0;
         for(LineGraphSeries s:mSeries){
             Iterator<DataPoint> it = s.getValues(s.getLowestValueX(), s.getHighestValueX());
-            i++;
+            i = 0;
             while(it.hasNext()){
                 data = it.next();
                 values[i][j] = (float) data.getY();
-                j++;
+                i++;
             }
+            j++;
         }
         return values;
     }

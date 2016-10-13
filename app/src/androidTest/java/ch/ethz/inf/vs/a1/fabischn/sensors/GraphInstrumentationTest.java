@@ -63,6 +63,7 @@ public class GraphInstrumentationTest
      */
     @Test
     public void test3() {
+        // TODO doesn't work
         float[][] values = createArray(101, 3, 1);
         float[][] target = createArray(100, 3, 4);
         carryOutTest(values, target);
@@ -73,6 +74,7 @@ public class GraphInstrumentationTest
      */
     @Test
     public void test4() {
+        // TODO doesn't work
         float[][] values = createArray(200, 3, 1);
         float[][] target = createArray(100, 3, 301);
         carryOutTest(values, target);
@@ -83,6 +85,7 @@ public class GraphInstrumentationTest
      */
     @Test
     public void test5() {
+        // TODO doesn't work
         float[][] values = createArray(1000, 3, 1);
         float[][] target = createArray(100, 3, 2701);
         carryOutTest(values, target);
